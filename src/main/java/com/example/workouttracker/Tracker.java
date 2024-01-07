@@ -1,9 +1,9 @@
 package com.example.workouttracker;
 
 import java.io.*;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Tracker {
@@ -48,34 +48,63 @@ public class Tracker {
         }
 
     }
+    private void handleSunday() {
+        LocalDate now = LocalDate.now();
 
-    public int changeCounter() {
-        getLastDate();
-        if(!firstDay) {
-            //dayCounter.setText(String.valueOf(counter));
-            if (lastDate.equals(LocalDate.now())) {
-                //information.setText("You already worked out today!");
-                System.out.println("You already worked out today!");
-                return 1;
-            } else if (lastDate.isBefore(LocalDate.now())) {
+            if(lastDate.getDayOfWeek() == DayOfWeek.SATURDAY) {
                 counter++;
-                //information.setText("Congratulations!");
+            }
+            else {
+                counter =1;
+            }
+
+    }
+    public enum options {
+        ALREADY, CONSECUTIVE, SUNDAY,SKIPPED;
+    }
+    public options changeCounter() {
+        // get the last date
+        getLastDate();
+        //check if its first day or not
+        if(!firstDay) {
+            // check if already worked out today
+            // gop: khong phai tap nua
+            if (lastDate.equals(LocalDate.now())) {
+                System.out.println("You already worked out today!");
+                return options.ALREADY;
+            }
+            if (LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY) {
+                return options.SUNDAY;
+            }
+            // check if worked out yesterday
+            if (lastDate.equals(LocalDate.now().minusDays(1))) {
+                counter++;
                 System.out.println("Congratulations!");
-                //dayCounter.setText(String.valueOf(counter));
                 updateData();
-                return 2;
+                return options.CONSECUTIVE;
             } else {
-                counter = 1;
-                //dayCounter.setText(String.valueOf(counter));
-                updateData();
-                return 3;
+                // cac truong hop xay ra: hom nay la thu hai va lan cuoi la chu nhat. hom nay la thu hai
+                // nhung lan cuoi khong phai chu nhat, hom nay khong phai thu hai
+                if(LocalDate.now().getDayOfWeek()==DayOfWeek.MONDAY) {
+                    handleSunday();
+                    System.out.println("Congratulations!");
+                    updateData();
+                    return options.CONSECUTIVE;
+                }
+                else {
+                    counter = 1;
+                    //dayCounter.setText(String.valueOf(counter));
+                    updateData();
+                    return options.SKIPPED;
+                }
+
             }
         }
         else {
             counter++;
             //information.setText("Congratulations!");
             updateData();
-            return 4;
+            return options.CONSECUTIVE;
         }
         //dayCounter.setText(String.valueOf(counter));
     }

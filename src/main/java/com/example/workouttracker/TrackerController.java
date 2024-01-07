@@ -22,12 +22,13 @@ public class TrackerController implements Initializable {
     private int counter = 0;
     //private final File data = new File("src/resources/data.txt");
     @FXML
-    private Label dayCounter, information;
+    private Label dayCounter, information, workouttips;
+
     @FXML
-    private Button confirmation;
+    private Button confirmation, settingsBtn;
     private LocalDate lastDate;
     private boolean firstDay;
-    private Tracker fitnessTrack = new Tracker();
+    private final Tracker fitnessTrack = new Tracker();
     public TrackerController() {
         counter = 0;
     }
@@ -37,91 +38,39 @@ public class TrackerController implements Initializable {
         //getLastDate();
         counter = fitnessTrack.getCounter();
         dayCounter.setText(String.valueOf(counter));
+        workouttips.setText(TrackerTips.print());
+        //tips.setText(TrackerTips.print());
         confirmation.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                int track = fitnessTrack.changeCounter();
+                Tracker.options track = fitnessTrack.changeCounter();
                 switch (track) {
-                    case 1-> {
+                    case ALREADY-> {
                         information.setText("You already worked out today!");
                     }
-                    case 2, 4 -> {
+                    case CONSECUTIVE -> {
                         information.setText("Congratulations!");
+                    }
+                    case SKIPPED -> {
+                        information.setText("Make sure to practice tomorrow!");
+                    }
+                    case SUNDAY -> {
+                        information.setText("It's Sunday, go outside!");
+                        //information.setText(TrackerTips.print());
+
                     }
                 }
                 counter = fitnessTrack.getCounter();
                 dayCounter.setText(String.valueOf(counter));
             }
         });
+//        settingsBtn.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//
+//            }
+//        });
     }
 
-//    private void getLastDate() {
-//        try (Scanner scanner = new Scanner(data)) {
-//            // Read the entire line from the file
-//
-//            if(data.length()!=0) {
-//                firstDay = false;
-//                counter = scanner.nextInt();
-//                scanner.nextLine();
-//                String line = scanner.nextLine();
-//                // Extract the date part (assuming the date is always at the end of the line)
-//                String dateString = line.substring(line.lastIndexOf(" ") + 1);
-//
-//                // Specify the format for the date
-//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d");
-//
-//                // Parse the date from the extracted string
-//                lastDate = LocalDate.parse(dateString, formatter);
-//            }
-//            else {
-//                firstDay = true;
-//            }
-//        } catch (FileNotFoundException e) {
-//            System.err.println("File not found: " + e.getMessage());
-//        }
-//
-//    }
-//
-//    private void changeCounter() {
-//        getLastDate();
-//        if(!firstDay) {
-//            //dayCounter.setText(String.valueOf(counter));
-//            if (lastDate.equals(LocalDate.now())) {
-//                information.setText("You already worked out today!");
-//                System.out.println("You already worked out today!");
-//            } else if (lastDate.isBefore(LocalDate.now())) {
-//                counter++;
-//                information.setText("Congratulations!");
-//                System.out.println("Congratulations!");
-//                //dayCounter.setText(String.valueOf(counter));
-//                updateData();
-//            } else {
-//                counter = 1;
-//                //dayCounter.setText(String.valueOf(counter));
-//                updateData();
-//            }
-//        }
-//        else {
-//            counter++;
-//            information.setText("Congratulations!");
-//            updateData();
-//        }
-//        dayCounter.setText(String.valueOf(counter));
-//    }
-//
-//    private void updateData() {
-//        lastDate = LocalDate.now();
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(data, false))) {
-//            // The second parameter 'true' in FileWriter constructor appends to the file if it already exists
-//            writer.write(String.valueOf(counter));
-//            writer.newLine(); // Add a new line for better readability or if you plan to write more data
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d");
-//            String formattedDate = lastDate.format(formatter);
-//            writer.write("Last workout: " + formattedDate);
-//            System.out.println("Date has been written to the file.");
-//        } catch (IOException e) {
-//            System.err.println("Error writing to the file: " + e.getMessage());
-//        }
-//    }
 
 }

@@ -6,8 +6,9 @@
 
 <AnchorPane prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workouttracker.TrackerController">
    <children>
-      <Label fx:id="information" layoutX="146.0" layoutY="53.0" prefHeight="18.0" prefWidth="349.0" text="what" />
-      <Label fx:id="dayCounter" layoutX="179.0" layoutY="127.0" prefHeight="18.0" prefWidth="328.0" text="nigga" />
+      <Label fx:id="information" layoutX="146.0" layoutY="53.0" prefHeight="18.0" prefWidth="77.0" text="what" />
+      <Label fx:id="dayCounter" layoutX="54.0" layoutY="120.0" prefHeight="18.0" prefWidth="174.0" text="nigga" />
       <Button fx:id="confirmation" layoutX="192.0" layoutY="175.0" mnemonicParsing="false" text="Button" />
+      <Label fx:id="workouttips" layoutX="72.0" layoutY="45.0" prefHeight="18.0" prefWidth="77.0" text="Label" />
    </children>
 </AnchorPane>
