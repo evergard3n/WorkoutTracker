@@ -33,7 +33,7 @@ public class TrackerTips {
         ini();
         StringBuilder sbc = new StringBuilder();
         if(lcd.getDayOfWeek()== DayOfWeek.MONDAY||lcd.getDayOfWeek()== DayOfWeek.THURSDAY) {
-            sbc.append(workouts.get(0).toString()).append('\n').append(workouts.get(1).toString());
+            sbc.append(workouts.get(0).toString()).append('\n').append(workouts.get(1).toString()).append("a");
         }
         if(lcd.getDayOfWeek()== DayOfWeek.TUESDAY||lcd.getDayOfWeek()== DayOfWeek.FRIDAY) {
             sbc.append(workouts.get(2).toString()).append('\n').append(workouts.get(3).toString());

@@ -7,22 +7,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Tracker {
-    private String path;
+    protected String path;
     //private File data = new File(path);
-    private File data = new File("src/resources/data.txt");
-    private boolean firstDay = false;
-    private int counter = 0;
-    private LocalDate lastDate;
+    protected File data;
+    protected boolean firstDay = false;
+    protected int counter = 0;
+    protected LocalDate lastDate;
     public Tracker() {}
     public Tracker(File data) {
-        getLastDate();
+        //getLastDate();
         this.data = data;
     }
     public int getCounter() {
         getLastDate();
         return counter;
     }
-    private void getLastDate() {
+    void getLastDate() {
         try (Scanner scanner = new Scanner(data)) {
             // Read the entire line from the file
 
@@ -48,7 +48,7 @@ public class Tracker {
         }
 
     }
-    private void handleSunday() {
+    void handleSunday() {
         LocalDate now = LocalDate.now();
 
             if(lastDate.getDayOfWeek() == DayOfWeek.SATURDAY) {
@@ -67,37 +67,17 @@ public class Tracker {
         getLastDate();
         //check if its first day or not
         if(!firstDay) {
-            // check if already worked out today
-            // gop: khong phai tap nua
-            if (lastDate.equals(LocalDate.now())) {
-                System.out.println("You already worked out today!");
-                return options.ALREADY;
-            }
-            if (LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY) {
-                return options.SUNDAY;
-            }
-            // check if worked out yesterday
             if (lastDate.equals(LocalDate.now().minusDays(1))) {
                 counter++;
                 System.out.println("Congratulations!");
                 updateData();
                 return options.CONSECUTIVE;
-            } else {
-                // cac truong hop xay ra: hom nay la thu hai va lan cuoi la chu nhat. hom nay la thu hai
-                // nhung lan cuoi khong phai chu nhat, hom nay khong phai thu hai
-                if(LocalDate.now().getDayOfWeek()==DayOfWeek.MONDAY) {
-                    handleSunday();
-                    System.out.println("Congratulations!");
-                    updateData();
-                    return options.CONSECUTIVE;
-                }
-                else {
-                    counter = 1;
+            }
+            else {
+                counter = 1;
                     //dayCounter.setText(String.valueOf(counter));
                     updateData();
                     return options.SKIPPED;
-                }
-
             }
         }
         else {
@@ -109,7 +89,7 @@ public class Tracker {
         //dayCounter.setText(String.valueOf(counter));
     }
 
-    private void updateData() {
+    protected void updateData() {
         lastDate = LocalDate.now();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(data, false))) {
             // The second parameter 'true' in FileWriter constructor appends to the file if it already exists

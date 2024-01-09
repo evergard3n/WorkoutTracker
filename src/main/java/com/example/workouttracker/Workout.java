@@ -25,4 +25,9 @@ public class Workout {
     public void setReps(String reps) {
         this.reps = reps;
     }
+
+    @Override
+    public String toString() {
+        return name+" "+reps;
+    }
 }

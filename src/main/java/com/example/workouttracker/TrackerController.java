@@ -19,16 +19,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TrackerController implements Initializable {
-    private int counter = 0;
-    //private final File data = new File("src/resources/data.txt");
+    private int counter = 0, counter2 = 0;
+    private final File data = new File("src/resources/data.txt");
     @FXML
-    private Label dayCounter, information, workouttips;
+    private Label dayCounter, information, workouttips, information2;
 
     @FXML
     private Button confirmation, settingsBtn;
     private LocalDate lastDate;
     private boolean firstDay;
-    private final Tracker fitnessTrack = new Tracker();
+    private final Tracker fitnessTrack = new WorkoutTracker(data);
+    private final Tracker masterTrack = new Tracker(new File("src/resources/data2.txt"));
     public TrackerController() {
         counter = 0;
     }
@@ -37,7 +38,8 @@ public class TrackerController implements Initializable {
 
         //getLastDate();
         counter = fitnessTrack.getCounter();
-        dayCounter.setText(String.valueOf(counter));
+        counter2 = masterTrack.getCounter();
+        dayCounter.setText(String.valueOf(counter)+" "+ String.valueOf(counter2));
         workouttips.setText(TrackerTips.print());
         //tips.setText(TrackerTips.print());
         confirmation.setOnAction(new EventHandler<ActionEvent>() {
@@ -64,12 +66,20 @@ public class TrackerController implements Initializable {
                 dayCounter.setText(String.valueOf(counter));
             }
         });
-//        settingsBtn.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//
-//            }
-//        });
+        settingsBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Tracker.options track = masterTrack.changeCounter();
+                switch (track) {
+                    case CONSECUTIVE -> {
+                        information2.setText("Congratulations!");
+                    }
+                    case SKIPPED -> {
+                        information2.setText("Make sure to practice tomorrow!");
+                    }
+                }
+            }
+        });
     }
 
 
